@@ -120,7 +120,7 @@
           return alert("You did not approve contract for batch transfer yet. Please do that first. Aborted batch transfer.");
         }
         const amount = document.getElementById("amount").value;
-		const num = thers.BigNumber.from(amount);
+		const num = ethers.BigNumber.from(amount);
 		
         const transferContract = new ethers.Contract(transferContractAddress, transferContractAbi, provider);
         const transferContractWithSigner = transferContract.connect(signer);
@@ -131,3 +131,6 @@
   
   </body>
 </html>
+
+
+
