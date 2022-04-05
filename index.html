@@ -101,8 +101,7 @@
         await ethereum.request({ method: "eth_requestAccounts" });
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-
-       
+		
         const transferContractAddress = "0x36b9214f84D7c585C29638cb2d1bFf0861C45B7A";
         const erc721ContractAddress = document.getElementById("contract").value;
         if (erc721ContractAddress.length !== 42) {
@@ -113,18 +112,20 @@
           return alert("Please fill in token recipient address.")
         }
         if (erc721ContractAddress === recipientAddress) {
-          alert("You are about to send tokens to the contract address. If this extra warning saved you, please make a tweet mentioning @fulldecent and kwyjibo.")
+          alert("You are about to send tokens to the contract address")
         }
         const erc721Contract = new ethers.Contract(erc721ContractAddress, erc721abi, provider);
         const isAlreadyApproved = await erc721Contract.isApprovedForAll(await signer.getAddress(), transferContractAddress);
         if (!isAlreadyApproved) {
           return alert("You did not approve contract for batch transfer yet. Please do that first. Aborted batch transfer.");
         }
-        const amount = document.getElementById("amount").value.trim().split(/\s+/);
+        const amount = document.getElementById("amount").value;
+		const num = thers.BigNumber.from(amount);
+		
         const transferContract = new ethers.Contract(transferContractAddress, transferContractAbi, provider);
         const transferContractWithSigner = transferContract.connect(signer);
-        await transferContractWithSigner.batchTransfer(erc721ContractAddress, recipientAddress, amount);
-
+        await transferContractWithSigner.batchTransfer(erc721ContractAddress, recipientAddress, num);
+		
       });
     </script>
   
